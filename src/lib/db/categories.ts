@@ -30,10 +30,11 @@ const categoriesMap = Object.entries(categories).reduce((accum, [key, val]) => {
 
 	category.activities.push({
 		id: key,
-		name: val.labels.en
+		name: val.labels.en,
+		categoryId: parentId
 	})
 
-	accum.set(parentId, category)
+	if (!accum.get(parentId)) accum.set(parentId, category)
 
 	return accum
 }, new Map<string, Category>())

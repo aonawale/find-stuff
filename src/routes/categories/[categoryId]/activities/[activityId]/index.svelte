@@ -7,8 +7,7 @@
 		).then((res) => res.json())
 		return {
 			props: {
-				activity,
-				categoryId
+				activity
 			}
 		}
 	}
@@ -18,20 +17,41 @@
 	import { goto } from '$app/navigation'
 
 	import IconButton from '$lib/components/IconButton.svelte'
+	import PlaceCard from '$lib/components/PlaceCard.svelte'
 	import SearchBar from '$lib/components/SearchBar.svelte'
+	import { search } from '$lib/db/places'
 	import type { Activity } from '$lib/types/category'
+	import type { Place } from '$lib/types/place'
 
-	export let categoryId: string
 	export let activity: Activity
+
+	$: {
+		searchPlaces(activity.id)
+	}
+
+	let searchValue = 'south africa'
+	let places: Place[] = []
+
+	const searchPlaces = async (activityId: string = activity.id, near: string = searchValue) => {
+		if (!activityId || !near) return
+		places = await search(activityId, near)
+	}
 </script>
 
-<div class="fixed top-0 right-0 bottom-0 w-96 p-4 bg-slate-50">
+<div class="p-4 bg-slate-50 h-full w-full">
 	<div class="flex items-center">
 		<IconButton
 			icon="close"
-			on:click={() => goto(`/categories/${categoryId}`, { replaceState: true })}
+			on:click={() => goto(`/categories/${activity.categoryId}`, { replaceState: true })}
 		/>
 		<h2 class="ml-2">{activity.name}</h2>
 	</div>
-	<SearchBar />
+	<form on:submit|preventDefault={() => searchPlaces()}>
+		<SearchBar bind:value={searchValue} />
+	</form>
+	<div class="mt-4 grid grid-cols-1 gap-4">
+		{#each places as place (place.fsqId)}
+			<PlaceCard {place} />
+		{/each}
+	</div>
 </div>

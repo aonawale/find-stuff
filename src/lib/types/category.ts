@@ -1,6 +1,7 @@
 export interface Activity {
 	id: string
 	name: string
+	categoryId: string
 }
 
 export interface Category {
