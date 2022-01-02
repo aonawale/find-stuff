@@ -34,7 +34,7 @@ const categoriesMap = Object.entries(categories).reduce((accum, [key, val]) => {
 		categoryId: parentId
 	})
 
-	if (!accum.get(parentId)) accum.set(parentId, category)
+	if (!accum.has(parentId)) accum.set(parentId, category)
 
 	return accum
 }, new Map<string, Category>())

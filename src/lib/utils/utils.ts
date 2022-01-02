@@ -1,3 +1,5 @@
+import type { Response } from '@sveltejs/kit'
+
 const isObject = (obj: Record<string, unknown>) =>
 	typeof obj === 'object' && !Array.isArray(obj) && obj !== null
 
@@ -17,3 +19,20 @@ export const camelCaseKeys = (obj: Record<string, unknown>): Record<string, unkn
 		}),
 		{}
 	)
+
+class SvelteError extends Error {
+	url: string
+	status: number
+
+	constructor(res: Response, url: string) {
+		super()
+		this.url = url
+		this.status = res.status
+	}
+}
+
+export const fetchData = async (fetch: any, url: string) => {
+	const res = await fetch(url)
+	if (res.ok) return res.json()
+	throw new SvelteError(res, url)
+}

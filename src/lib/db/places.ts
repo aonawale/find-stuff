@@ -41,6 +41,7 @@ const makeRequest =
 const fsRequest = makeRequest({ host: 'https:api.foursquare.com/v3', token: FOURSQUARE_API_KEY })
 
 /** @typedef {import('../types/Place').Place} Place */
+/** @typedef {import('../types/Place').Photo} Photo */
 
 /**
  * @param {string} categoryId
@@ -53,3 +54,25 @@ export const search = async (categoryId: string, near: string) => {
 	})
 	return results.map(camelCaseKeys)
 }
+
+/**
+ * @param {string} placeId
+ * @returns {Place}
+ */
+export const read = async (placeId: string) =>
+	camelCaseKeys(
+		await fsRequest({
+			path: `/places/${placeId}`
+		})
+	)
+
+/**
+ * @param {string} placeId
+ * @returns {Array<Photo>}
+ */
+export const photos = async (placeId: string) =>
+	(
+		await fsRequest({
+			path: `/places/${placeId}/photos`
+		})
+	).map(camelCaseKeys)

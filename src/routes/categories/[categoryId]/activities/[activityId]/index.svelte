@@ -15,7 +15,6 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation'
-
 	import IconButton from '$lib/components/IconButton.svelte'
 	import PlaceCard from '$lib/components/PlaceCard.svelte'
 	import SearchBar from '$lib/components/SearchBar.svelte'
@@ -51,7 +50,13 @@
 	</form>
 	<div class="mt-4 grid grid-cols-1 gap-4">
 		{#each places as place (place.fsqId)}
-			<PlaceCard {place} />
+			<PlaceCard
+				{place}
+				on:click={() =>
+					goto(
+						`/categories/${activity.categoryId}/activities/${activity.id}/places/${place.fsqId}`
+					)}
+			/>
 		{/each}
 	</div>
 </div>

@@ -30,6 +30,15 @@ export interface Location {
 
 export interface RelatedPlaces {}
 
+export interface Photo {
+	id: string
+	createdAt: string
+	prefix: string
+	suffix: string
+	width: number
+	height: number
+}
+
 export interface Place {
 	fsqId: string
 	categories: Category[]
@@ -41,3 +50,8 @@ export interface Place {
 	relatedPlaces: RelatedPlaces
 	timezone: string
 }
+
+export const placeAddress = (place: Place) =>
+	[place.location.address, place.location.locality, place.location.region]
+		.filter((val) => val)
+		.join(', ')
